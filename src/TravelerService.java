@@ -65,24 +65,32 @@ public class TravelerService implements Runnable
      */
     public void executeCommand(String command)
     {
-        int account = in.nextInt();
-        if (command.equals("JOURNEY"))
-        {
-            double amount = in.nextDouble();
-            traveler.deposit(account, amount);
-        }
-        else if (command.equals("WALK"))
-        {
-            double amount = in.nextDouble();
-            traveler.withdraw(account, amount);
-        }
-        else if (!command.equals("BALANCE"))
-        {
-            out.println("Invalid command");
-            out.flush();
-            return;
-        }
-        out.println(account + " " + traveler.getBalance(account));
-        out.flush();
+        switch (command) {
+            case "MOVE":
+                int distance = in.nextInt();
+                int damageChance = (int) (Math.random() * 10); // Random damage chance
+                if (damageChance == 0) {
+                    traveler.damaged(); // Implement this method in Player class
+                    out.println("You moved " + distance + " units, but you took damage!");
+                } else {
+                    out.println("You moved " + distance + " units safely.");
+                }
+                out.flush();
+                break;
+            case "HEAL":
+                int healAmount = (int) (Math.random() * 5) + 1; // Random heal amount (1-5)
+                traveler.heal(healAmount); // Implement this method in Player class
+                out.println("You healed yourself for " + healAmount + " HP.");
+                out.flush();
+                break;
+            case "CHECK_HEALTH":
+                int currentHP = traveler.getHP(); // Implement this method in Player class
+                out.println("Your remaining HP: " + currentHP);
+                out.flush();
+                break;
+            default:
+                out.println("Invalid command");
+                out.flush();
+                break;
     }
 }
