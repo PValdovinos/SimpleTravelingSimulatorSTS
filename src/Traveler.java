@@ -4,6 +4,7 @@ public class Traveler {
     private TravelerAccount[] players;
     private int hp;
     private int goalDistance;
+    private int distance;
 
     /**
      * Constructs a bank account with a given number of accounts.
@@ -41,11 +42,10 @@ public class Traveler {
 
     /**
      * Withdraws money from a bank account.
-     *
-     * @param distance the assigned distance
      */
-    public void move(int distance)
+    public void move(int playerNumber)
     {
+        TravelerAccount traveler = players[playerNumber];
         if(randomEvent())
         {
             // Handle it below

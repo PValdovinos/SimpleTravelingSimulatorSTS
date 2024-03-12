@@ -12,22 +12,27 @@ public class TravelerClient {
             Scanner in = new Scanner(instream);
             PrintWriter out = new PrintWriter(outstream);
 
-            String command = "MOVE 10";
+            String command = "MOVE 1 10";
             System.out.println("Sending: " + command);
             out.print(command + "\n");
             out.flush();
+            String response = in.nextLine();
+            System.out.println("Response: " + response);
 
 
             command = "HEAL";
             System.out.println("Sending: " + command);
             out.print(command + "\n");
             out.flush();
-
+            response = in.nextLine();
+            System.out.println("Response: " + response);
 
             command = "DO_NOTHING";
             System.out.println("Sending: " + command);
             out.print(command + "\n");
             out.flush();
+            response = in.nextLine();
+            System.out.println("Response: " + response);
 
             command = "QUIT";
             System.out.println("Sending: " + command);
