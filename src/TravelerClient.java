@@ -17,27 +17,31 @@ public class TravelerClient
         {
             InputStream instream = s.getInputStream();
             OutputStream outstream = s.getOutputStream();
-            Scanner in = new Scanner(instream);
-            PrintWriter out = new PrintWriter(outstream);
+            Scanner scanner = new Scanner(instream);
+            PrintWriter printWriter = new PrintWriter(outstream);
 
-            String command = "DEPOSIT 3 1000";
-            System.out.println("Sending: " + command);
-            out.print(command + "\n");
-            out.flush();
-            String response = in.nextLine();
-            System.out.println("Receiving: " + response);
+            Scanner consoleInput = new Scanner(System.in);
 
-            command = "WITHDRAW 3 500";
-            System.out.println("Sending: " + command);
-            out.print(command + "\n");
-            out.flush();
-            response = in.nextLine();
-            System.out.println("Receiving: " + response);
+            System.out.println("Welcome to the Traveler Game!");
+            System.out.println("Commands: MOVE [distance], HEAL, DO_NOTHING, QUIT");
 
-            command = "QUIT";
-            System.out.println("Sending: " + command);
-            out.print(command + "\n");
-            out.flush();
+            boolean running = true;
+            while (running) {
+                System.out.print("Enter command: ");
+                String command = consoleInput.nextLine().trim();
+
+                // Send command to the server
+                printWriter.println(command);
+
+                // Receive response from the server
+                String response = scanner.nextLine();
+                System.out.println("Server response: " + response);
+
+                // Check if the server response indicates the end of the game
+                if (response.startsWith("Game Over")) {
+                    running = false;
+                }
+            }
         }
     }
 }

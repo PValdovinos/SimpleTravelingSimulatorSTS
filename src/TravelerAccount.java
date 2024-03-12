@@ -1,89 +1,53 @@
-import java.util.Scanner;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
 public class TravelerAccount {
-
-    /**
-     * A traveler account has "actions" that can be chosen by using
-     * their respective terms.
-     */
     private int distance;
-    private int unitMovement;
     private int health;
-    private int healingItems;
-    private Lock distanceChangeLock;
+    private Lock accountLock;
 
-    // TO DO: Implement scanners into methods to ensure player can choose their actions.
-
-    Scanner scanner = new Scanner(System.in);
-
-    /**
-     * Constructs a traveler awaiting their "journey".
-     */
     public TravelerAccount() {
         distance = 0;
-        distanceChangeLock = new ReentrantLock();
+        health = 100; // Assuming starting health is 100
+        accountLock = new ReentrantLock();
     }
 
-    /**
-     * Allows player to choose journey length.
-     *
-     * @param distance the amount to move to reach your goal
-     */
-    public void journey(int distance) {
-        distanceChangeLock.lock();
+    public void increaseDistance(int amount) {
+        accountLock.lock();
         try {
-            //String newDistanceToGoal = "You now have to move" + (distance) - amount;
-            balance = newBalance;
+            distance += amount;
         } finally {
-            balanceChangeLock.unlock();
+            accountLock.unlock();
         }
     }
 
-    /**
-     * Player chooses how far they wish to move towards their destination.
-     *
-     * @param unitMovement the amount to move towards goal
-     */
-    public void walk(int unitMovement) {
-        distanceChangeLock.lock();
+    public void decreaseHealth(int amount) {
+        accountLock.lock();
         try {
-            int newDistanceToGoal = Integer.parseInt("You now have to move" + (distance - unitMovement));
-        }
-        finally
-        {
-            distanceChangeLock.unlock();
+            health -= amount;
+        } finally {
+            accountLock.unlock();
         }
     }
 
-    /**
-     * Heals the player a certain amount (Will be randomly generated between 1-12).
-     *
-     * @return a string acknowledging having healed
-     */
-    public int heal()
-    {
-        distanceChangeLock.lock();
-        try
-        {
-
+    public void heal(int amount) {
+        accountLock.lock();
+        try {
+            health += amount;
+            if (health > 100) {
+                health = 100; // Cap health to 100
+            }
+        } finally {
+            accountLock.unlock();
         }
     }
 
-    /**
-     * Gets the current health of the player (Will be randomly generated within reason).
-     *
-     * @return the current balance
-     */
-    public String health()
-    {
-        return "You're not looking too hot...";
+    public int getDistance() {
+        return distance;
     }
 
-    public String doNothing()
-    {
-        return "You decide to wait and do nothing... kinda lonely";
+    public int getHealth() {
+        return health;
     }
 }

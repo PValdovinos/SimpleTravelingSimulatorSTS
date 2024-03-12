@@ -6,8 +6,8 @@ public class TravelerServer
 {
     public static void main(String[] args) throws IOException
     {
-        final int PLAYER_HP = 20;
-        Traveler traveler = new Traveler(PLAYER_HP);
+        final int PLAYER_HP = 30;
+        Traveler traveler = new Traveler(PLAYER_HP, 100);
         final int SBAP_PORT = 8888;
         ServerSocket server = new ServerSocket(SBAP_PORT);
         System.out.println("Waiting for clients to connect...");
