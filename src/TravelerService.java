@@ -1,82 +1,58 @@
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class TravelerService implements Runnable {
+    private final Socket clientSocket;
+    private final Traveler traveler;
 
-    private Socket s;
-    private Scanner in;
-    private PrintWriter out;
-    private Traveler traveler;
-
-    /**
-     * Constructs a service object that processes commands
-     * from a socket for a traveler.
-     *
-     * @param aSocket the socket
-     * @param aTrav   the traveler
-     */
-    public TravelerService(Socket aSocket, Traveler aTrav) {
-        s = aSocket;
-        traveler = aTrav;
+    public TravelerService(Socket clientSocket, Traveler traveler) {
+        this.clientSocket = clientSocket;
+        this.traveler = traveler;
     }
 
+    @Override
     public void run() {
-        try {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+             PrintWriter writer = new PrintWriter(clientSocket.getOutputStream(), true)) {
+
+            String command;
+            while ((command = reader.readLine()) != null) {
+                if (command.equals("QUIT")) {
+                    break;
+                } else {
+                    executeCommand(command, writer);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                in = new Scanner(s.getInputStream());
-                out = new PrintWriter(s.getOutputStream());
-                doService();
-            } finally {
-                s.close();
-            }
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    /**
-     * Executes all commands until the QUIT command or the
-     * end of input.
-     */
-    public void doService() throws IOException {
-        while (true) {
-            if (!in.hasNext()) {
-                return;
-            }
-            String command = in.next();
-            if (command.equals("QUIT")) {
-                return;
-            } else {
-                executeCommand(command);
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
-    /**
-     * Executes a single command.
-     *
-     * @param command the command to execute
-     */
-    public void executeCommand(String command) {
+    private void executeCommand(String command, PrintWriter writer) {
         switch (command) {
-            case "MOVE":
-                int distance = in.nextInt();
-                traveler.move(distance);
-                int remaining = traveler.getGoalDistance() - distance;
-                System.out.println("You are now ");
+            case "MOVE 10":
+                traveler.move(10);
+                int remaining = traveler.getGoalDistance();
+                writer.println("You moved 10 units. Remaining distance: " + remaining);
                 break;
             case "HEAL":
                 traveler.heal();
+                writer.println("You healed yourself.");
                 break;
             case "DO_NOTHING":
                 traveler.doNothing();
+                writer.println("You decided to do nothing.");
                 break;
             default:
-                out.println("Invalid command");
-                out.flush();
+                writer.println("Invalid command");
                 break;
         }
+        writer.flush();
     }
 }
