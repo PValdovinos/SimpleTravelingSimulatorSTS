@@ -19,7 +19,6 @@ public class TravelerClient {
             String response = in.nextLine();
             System.out.println("Response: " + response);
 
-
             command = "HEAL";
             System.out.println("Sending: " + command);
             out.print(command + "\n");

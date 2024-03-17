@@ -43,7 +43,7 @@ public class Traveler {
     /**
      * Withdraws money from a bank account.
      */
-    public void move(int playerNumber)
+    public void move(int playerNumber, int distance)
     {
         TravelerAccount traveler = players[playerNumber];
         if(randomEvent())

@@ -65,22 +65,26 @@ public class TravelerService implements Runnable {
 //        writer.flush();
 
     private void executeCommand(String command) throws NoSuchElementException {
+
         int player = in.nextInt();
         if(command.equals("MOVE"))
         {
-            traveler.move(player + in.nextInt());
+            traveler.move(player, in.nextInt());
             int remaining = traveler.getGoalDistance();
             out.println("You moved 10 units. Remaining distance: " + remaining);
+            out.flush();
         }
         else if(command.equals("HEAL"))
         {
             traveler.heal();
             out.println("You healed yourself.");
+            out.flush();
         }
         else if(command.equals("DO_NOTHING"))
         {
             traveler.doNothing();
             out.println("You decided to do nothing.");
+            out.flush();
         }
         out.flush();
     }
