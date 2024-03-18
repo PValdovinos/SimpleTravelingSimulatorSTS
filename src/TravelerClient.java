@@ -40,3 +40,5 @@ public class TravelerClient {
         }
     }
 }
+
+// There is an output in the server tab when running the client... but client freaks out.
